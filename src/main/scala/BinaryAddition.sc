@@ -26,16 +26,16 @@ val test4ExectedSolution: List[Int] = List(1, 0, 1, 1, 1, 0, 1)
 def finishBinaryAdd(remainingBits: List[Boolean], carryBit: Boolean): List[Boolean] = ???
 
 // This function determines what the next carry bit should be based on current bits.
-def getNextCarryBit(pBit: Boolean, qBit: Boolean, carrybit: Boolean): Boolean = ???
+def getNextCarryBit(pBit: Boolean, qBit: Boolean, carrybit: Boolean): Boolean = (pBit && qBit) || (qBit && carrybit) || (pBit && carrybit)
 
 // This function does the binary addition of two Booleans and a carry bit.
-def addBits(pBit: Boolean, qBit: Boolean, carryBit: Boolean): Boolean = ???
+def addBits(pBit: Boolean, qBit: Boolean, carryBit: Boolean): Boolean = carryBit == (pBit == qBit)
 
 // This function does the binary addition of two boolean lists. Note that the lists may not be equal in length.
 def doBinaryAddition(pBits: List[Boolean], qBits: List[Boolean], carryBit: Boolean): List[Boolean] = ???
 
 // This function takes a list of any type and returns the list in reverse order.
-def reverseList(aList: List): List = aList.reverse
+//def reverseList(aList: List): List = aList.reverse
 
 // This function converts a binary integer list into its corresponding boolean list.
 def convertIntListToBooleanList(intList: List): List[Boolean] = intList.map{
@@ -44,7 +44,7 @@ def convertIntListToBooleanList(intList: List): List[Boolean] = intList.map{
 }
 
 // This function converts a boolean list into its corresponding binary integer list.
-def convertBooleanListToIntList(booleanList: List): List[Int] = booleanList.map{
+def convertBooleanListToIntList(booleanList: List[Boolean]): List[Int] = booleanList.map{
 	case false => 0
 	case true => 1
 }
@@ -58,7 +58,7 @@ def convertBooleanListToIntList(booleanList: List): List[Int] = booleanList.map{
   Note that the initial carry bit is assumed to be 0 (i.e., false).
 */
 def binaryAddition(pList: List[Int], qList: List[Int]): List[Int] = {
-	convertBooleanListToIntList(reverseList(doBinaryAddition(reverseList(convertIntListToBooleanList(pList)), reverseList(convertBooleanListToIntList(qList)), false)))
+	convertBooleanListToIntList(doBinaryAddition(convertIntListToBooleanList(pList).reverse, convertBooleanListToIntList(qList).reverse, false).reverse)
 }
 
 // Testing binary addition.

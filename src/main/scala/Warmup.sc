@@ -17,12 +17,22 @@ def twinprimeslist(n: Int): List[Int] = n match{
   case _ => if(twinPrime(n-2, n) || twinPrime(n+2, n)) n::twinprimeslist(n-1) else twinprimeslist(n-1)
 }
 
-println()
-
 val twinList = twinprimeslist(50)
 
+def gbHelper(i: Int, n: Int): Unit={
+  //println(i)
+  if ((i + n-i == n) && isPrime(i) && isPrime(n-i))
+      println("Golden bach number for " + n + " is " + i + " + " + (n-i))
+  else if(i < n)
+      gbHelper(i+1, n)
+}
+
 def goldbach(n: Int): Unit = {
-  println((1 to n).toList.filter(isPrime))
+  if(n % 2 != 0 || n <= 2)
+    println("Not Even or less then 2")
+  else
+    gbHelper(1, n)
 }
 
 goldbach(28)
+goldbach(60)

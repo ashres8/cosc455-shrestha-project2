@@ -23,7 +23,12 @@ val test4ExectedSolution: List[Int] = List(1, 0, 1, 1, 1, 0, 1)
 
 // This function does the binary addition when there are uneven lists and still must
 // finish the add with the carry bits.
-def finishBinaryAdd(remainingBits: List[Boolean], carryBit: Boolean): List[Boolean] = ???
+def finishBinaryAdd(remainingBits: List[Boolean], carryBit: Boolean): List[Boolean] =
+	(remainingBits.isEmpty, carryBit) match{
+		case (false, false) => remainingBits
+    case (true, true) => List(true)
+    case (false, true) => (!remainingBits.head)::finishBinaryAdd(remainingBits.tail, remainingBits.head)
+	}
 
 // This function determines what the next carry bit should be based on current bits.
 def getNextCarryBit(pBit: Boolean, qBit: Boolean, carrybit: Boolean): Boolean = (pBit && qBit) || (qBit && carrybit) || (pBit && carrybit)
@@ -32,13 +37,18 @@ def getNextCarryBit(pBit: Boolean, qBit: Boolean, carrybit: Boolean): Boolean = 
 def addBits(pBit: Boolean, qBit: Boolean, carryBit: Boolean): Boolean = carryBit == (pBit == qBit)
 
 // This function does the binary addition of two boolean lists. Note that the lists may not be equal in length.
-def doBinaryAddition(pBits: List[Boolean], qBits: List[Boolean], carryBit: Boolean): List[Boolean] = ???
+def doBinaryAddition(pBits: List[Boolean], qBits: List[Boolean], carryBit: Boolean): List[Boolean] =
+  (pBits.isEmpty, qBits.isEmpty, carryBit) match{
+    case (true, false, _) => finishBinaryAdd(qBits, carryBit)
+    case (false, true, _) => finishBinaryAdd(pBits, carryBit)
+    case (false, false, _) => addBits(pBits.head, qBits.head, carryBit)::doBinaryAddition(pBits.tail, qBits.tail, getNextCarryBit(pBits.head, qBits.head, carryBit))
+  }
 
 // This function takes a list of any type and returns the list in reverse order.
 //def reverseList(aList: List): List = aList.reverse
 
 // This function converts a binary integer list into its corresponding boolean list.
-def convertIntListToBooleanList(intList: List): List[Boolean] = intList.map{
+def convertIntListToBooleanList(intList: List[Int]): List[Boolean] = intList.map{
 	case 0 => false
 	case 1 => true
 }
@@ -58,7 +68,7 @@ def convertBooleanListToIntList(booleanList: List[Boolean]): List[Int] = boolean
   Note that the initial carry bit is assumed to be 0 (i.e., false).
 */
 def binaryAddition(pList: List[Int], qList: List[Int]): List[Int] = {
-	convertBooleanListToIntList(doBinaryAddition(convertIntListToBooleanList(pList).reverse, convertBooleanListToIntList(qList).reverse, false).reverse)
+	convertBooleanListToIntList(doBinaryAddition(convertIntListToBooleanList(pList).reverse, convertIntListToBooleanList(qList).reverse, false).reverse)
 }
 
 // Testing binary addition.
